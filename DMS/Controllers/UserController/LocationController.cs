@@ -1,6 +1,8 @@
 ﻿
 using Disaster_Management_system.Models.UserModels;
+using DMS.Areas.Identity.Data;
 using DMS.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,10 +11,13 @@ namespace Disaster_Management_system.Controllers.UserController
     public class LocationController : Controller
     {
         private readonly DMSDbContext _context;
-        public LocationController(DMSDbContext context)
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public LocationController(DMSDbContext context, UserManager<ApplicationUser> userManager)
         {
 
             _context = context;
+            this._userManager = userManager;
         }
 
         public IActionResult Index()
@@ -23,31 +28,35 @@ namespace Disaster_Management_system.Controllers.UserController
         [HttpPost]
         public async Task<IActionResult> Create(LocationViewModel model)
         {
-            var userIdString = HttpContext.Session.GetString("VictimId");
+            try
+            {
+                var userId = _userManager.GetUserId(this.User);
+                //Guid userId;
+                //if (!Guid.TryParse(userIdString, out userId))
+                //{
+                //    // Handle the case where userId is not a valid Guid
+                //    return BadRequest("Invalid user ID.");
+                //}
+                var location = new LocationViewModel
+                {
+                    Id = Guid.NewGuid(),
+                    Tole = model.Tole,
+                    Province = model.Province,
+                    District = model.District,
+                    Municipality = model.Municipality,
+                    Ward = model.Ward,
+                    VictimId = userId
+                };
 
-            Guid userId;
-            if (Guid.TryParse(userIdString, out userId))
-            {
-                ViewBag.UserId = userId;
+                _context.Locations.Add(location);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", "Disaster");
             }
-            else
+            catch (Exception ex)
             {
-                ViewBag.UserId = Guid.Empty;
+                // Optionally, return a custom error view or message
+                return StatusCode(500, "Internal server error");
             }
-            var location = new LocationViewModel
-            {
-                Id = Guid.NewGuid(),
-                Tole = model.Tole,
-                Province = model.Province,
-                District = model.District,
-                Municipality = model.Municipality,
-                Ward = model.Ward,
-                VictimId = userId
-            };
-             
-            _context.Locations.Add(location);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Index", "Disaster");
         }
 
        

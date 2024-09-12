@@ -1,4 +1,6 @@
-﻿namespace Disaster_Management_system.Models.UserModels
+﻿using DMS.Areas.Identity.Data;
+
+namespace Disaster_Management_system.Models.UserModels
 {
     public class LocationViewModel
     {
@@ -10,9 +12,9 @@
         public string Ward { get; set; }
 
         // Foreign keys
-        public Guid VictimId { get; set; }
+        public string VictimId { get; set; }
 
         // Navigation properties
-        public VictimViewModel Victim { get; set; }
+        public ApplicationUser user { get; set; }
     }
 }

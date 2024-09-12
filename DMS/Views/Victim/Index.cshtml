@@ -9,7 +9,7 @@
 <form id="victim-form" asp-action="Create" method="post">
     <div class="form-group">
         <label for="Name" class="form-label">Name</label>
-        <input id="Name" name="Name" class="form-control" />
+        <input id="Name" name="Name" value="@ViewData["FirstName"]" class="form-control" />
         <div class="invalid-feedback">
             <span asp-validation-for="Name"></span>
         </div>
@@ -23,11 +23,17 @@
     </div>
     <div class="form-group">
         <label for="Gender" class="form-label">Gender</label>
-        <input id="Gender" name="Gender" class="form-control" />
+        <select id="Gender" name="Gender" class="form-control">
+            <option value="" selected disabled>Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select>
         <div class="invalid-feedback">
             <span asp-validation-for="Gender"></span>
         </div>
     </div>
+
     <div class="form-group">
         <label for="ContactNumber" class="form-label">Contact Number</label>
         <input id="ContactNumber" name="ContactNumber" class="form-control" />

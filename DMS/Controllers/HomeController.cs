@@ -21,7 +21,20 @@ namespace DMS.Controllers
 
         public IActionResult Index()
         {
-         ViewData["UserId"] =  _userManager.GetUserId(this.User);
+            var user =  _userManager.GetUserAsync(this.User);
+
+            // Check if user is not null
+            if (user != null)
+            {
+                // Store the user's first name in ViewData
+                ViewData["FirstName"] = user.Result.FirstName; // Assuming ApplicationUser has a FirstName property
+            }
+            else
+            {
+                // Handle the case where the user is not found or not logged in
+                ViewData["FirstName"] = "Guest";
+            }
+
             return View();
         }
 

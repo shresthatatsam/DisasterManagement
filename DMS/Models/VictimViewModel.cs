@@ -9,7 +9,7 @@
         public string ContactNumber { get; set; }
         public bool Status { get; set; }
         public ICollection<PhotosViewModel> Photos { get; set; }
-        public ICollection<LocationViewModel> Locations { get; set; }
+        //public ICollection<LocationViewModel> Locations { get; set; }
         public ICollection<DisasterViewModel> Disasters { get; set; }
     }
 }

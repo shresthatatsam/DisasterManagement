@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DMS.Migrations
 {
     [DbContext(typeof(DMSDbContext))]
-    [Migration("20240912154636_all other models")]
-    partial class allothermodels
+    [Migration("20240912180717_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -148,8 +148,9 @@ namespace DMS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("VictimId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("VictimId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Ward")
                         .IsRequired()
@@ -369,13 +370,13 @@ namespace DMS.Migrations
 
             modelBuilder.Entity("Disaster_Management_system.Models.UserModels.LocationViewModel", b =>
                 {
-                    b.HasOne("Disaster_Management_system.Models.UserModels.VictimViewModel", "Victim")
+                    b.HasOne("DMS.Areas.Identity.Data.ApplicationUser", "user")
                         .WithMany("Locations")
                         .HasForeignKey("VictimId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Victim");
+                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("Disaster_Management_system.Models.UserModels.PhotosViewModel", b =>
@@ -440,11 +441,14 @@ namespace DMS.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("DMS.Areas.Identity.Data.ApplicationUser", b =>
+                {
+                    b.Navigation("Locations");
+                });
+
             modelBuilder.Entity("Disaster_Management_system.Models.UserModels.VictimViewModel", b =>
                 {
                     b.Navigation("Disasters");
-
-                    b.Navigation("Locations");
 
                     b.Navigation("Photos");
                 });

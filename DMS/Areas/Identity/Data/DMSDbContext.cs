@@ -35,9 +35,10 @@ public class DMSDbContext : IdentityDbContext<ApplicationUser>
             entity.Property(e => e.Municipality).IsRequired();
             entity.Property(e => e.Ward).IsRequired();
             entity.Property(e => e.Tole).IsRequired();
-            entity.HasOne(p => p.Victim)
-                  .WithMany(v => v.Locations)
-                  .HasForeignKey(p => p.VictimId);
+           entity.HasOne(p => p.user)
+              .WithMany(v => v.Locations)
+              .HasForeignKey(p => p.VictimId)
+              .OnDelete(DeleteBehavior.Restrict);
         });
 
         builder.Entity<VictimViewModel>(entity =>
