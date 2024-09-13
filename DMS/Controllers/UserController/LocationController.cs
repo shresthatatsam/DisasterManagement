@@ -31,12 +31,7 @@ namespace Disaster_Management_system.Controllers.UserController
             try
             {
                 var userId = _userManager.GetUserId(this.User);
-                //Guid userId;
-                //if (!Guid.TryParse(userIdString, out userId))
-                //{
-                //    // Handle the case where userId is not a valid Guid
-                //    return BadRequest("Invalid user ID.");
-                //}
+              
                 var location = new LocationViewModel
                 {
                     Id = Guid.NewGuid(),
@@ -45,7 +40,7 @@ namespace Disaster_Management_system.Controllers.UserController
                     District = model.District,
                     Municipality = model.Municipality,
                     Ward = model.Ward,
-                    VictimId = userId
+                    user_id = userId
                 };
 
                 _context.Locations.Add(location);

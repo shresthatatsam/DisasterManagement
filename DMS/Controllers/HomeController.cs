@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Disaster_Management_system.Data.Interface;
 using DMS.Areas.Identity.Data;
 using DMS.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -12,26 +13,25 @@ namespace DMS.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IDisasterCategory _disasterCategory;
 
-        public HomeController(ILogger<HomeController> logger , UserManager<ApplicationUser> userManager)
+        public HomeController(ILogger<HomeController> logger , UserManager<ApplicationUser> userManager, IDisasterCategory disasterCategory)
         {
             _logger = logger;
             this._userManager = userManager;
+            this._disasterCategory = disasterCategory;
         }
 
         public IActionResult Index()
         {
             var user =  _userManager.GetUserAsync(this.User);
 
-            // Check if user is not null
             if (user != null)
             {
-                // Store the user's first name in ViewData
-                ViewData["FirstName"] = user.Result.FirstName; // Assuming ApplicationUser has a FirstName property
+                ViewData["FirstName"] = user.Result.FirstName; 
             }
             else
             {
-                // Handle the case where the user is not found or not logged in
                 ViewData["FirstName"] = "Guest";
             }
 

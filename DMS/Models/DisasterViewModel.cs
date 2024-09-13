@@ -1,5 +1,7 @@
 ﻿
 
+using DMS.Areas.Identity.Data;
+
 namespace Disaster_Management_system.Models.UserModels
 {
     public class DisasterViewModel
@@ -10,9 +12,9 @@ namespace Disaster_Management_system.Models.UserModels
         public string Date_Occured { get; set; }
 
         // Foreign keys
-        public Guid VictimId { get; set; }
+        public string user_id { get; set; }
 
         // Navigation properties
-        public VictimViewModel Victim { get; set; }
+        public ApplicationUser user { get; set; }
     }
 }

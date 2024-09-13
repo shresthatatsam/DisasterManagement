@@ -12,7 +12,7 @@ namespace Disaster_Management_system.Models.UserModels
         public string Ward { get; set; }
 
         // Foreign keys
-        public string VictimId { get; set; }
+        public string user_id { get; set; }
 
         // Navigation properties
         public ApplicationUser user { get; set; }

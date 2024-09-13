@@ -95,6 +95,29 @@ namespace DMS.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Disaster_Management_system.Models.AdminModels.DisasterCategoryViewModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .IsRequired()
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Severity")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("disasterCategory", (string)null);
+                });
+
             modelBuilder.Entity("Disaster_Management_system.Models.UserModels.DisasterViewModel", b =>
                 {
                     b.Property<Guid>("Id")
@@ -113,12 +136,13 @@ namespace DMS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("VictimId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("user_id")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("VictimId");
+                    b.HasIndex("user_id");
 
                     b.ToTable("disasters", (string)null);
                 });
@@ -145,17 +169,17 @@ namespace DMS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("VictimId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Ward")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("user_id")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("VictimId");
+                    b.HasIndex("user_id");
 
                     b.ToTable("user_location", (string)null);
                 });
@@ -177,12 +201,13 @@ namespace DMS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("VictimId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("user_id")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("VictimId");
+                    b.HasIndex("user_id");
 
                     b.ToTable("photos", (string)null);
                 });
@@ -356,20 +381,20 @@ namespace DMS.Migrations
 
             modelBuilder.Entity("Disaster_Management_system.Models.UserModels.DisasterViewModel", b =>
                 {
-                    b.HasOne("Disaster_Management_system.Models.UserModels.VictimViewModel", "Victim")
+                    b.HasOne("DMS.Areas.Identity.Data.ApplicationUser", "user")
                         .WithMany("Disasters")
-                        .HasForeignKey("VictimId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("user_id")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Victim");
+                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("Disaster_Management_system.Models.UserModels.LocationViewModel", b =>
                 {
                     b.HasOne("DMS.Areas.Identity.Data.ApplicationUser", "user")
                         .WithMany("Locations")
-                        .HasForeignKey("VictimId")
+                        .HasForeignKey("user_id")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -378,13 +403,13 @@ namespace DMS.Migrations
 
             modelBuilder.Entity("Disaster_Management_system.Models.UserModels.PhotosViewModel", b =>
                 {
-                    b.HasOne("Disaster_Management_system.Models.UserModels.VictimViewModel", "Victim")
+                    b.HasOne("DMS.Areas.Identity.Data.ApplicationUser", "user")
                         .WithMany("Photos")
-                        .HasForeignKey("VictimId")
+                        .HasForeignKey("user_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Victim");
+                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -440,12 +465,9 @@ namespace DMS.Migrations
 
             modelBuilder.Entity("DMS.Areas.Identity.Data.ApplicationUser", b =>
                 {
-                    b.Navigation("Locations");
-                });
-
-            modelBuilder.Entity("Disaster_Management_system.Models.UserModels.VictimViewModel", b =>
-                {
                     b.Navigation("Disasters");
+
+                    b.Navigation("Locations");
 
                     b.Navigation("Photos");
                 });

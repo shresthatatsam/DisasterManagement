@@ -53,6 +53,20 @@ namespace DMS.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "disasterCategory",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Severity = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_disasterCategory", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "victims",
                 columns: table => new
                 {
@@ -175,29 +189,6 @@ namespace DMS.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "user_location",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Tole = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Province = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    District = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Municipality = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Ward = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    VictimId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_user_location", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_user_location_AspNetUsers_VictimId",
-                        column: x => x.VictimId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "disasters",
                 columns: table => new
                 {
@@ -205,17 +196,17 @@ namespace DMS.Migrations
                     Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Severity = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Date_Occured = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    VictimId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    user_id = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_disasters", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_disasters_victims_VictimId",
-                        column: x => x.VictimId,
-                        principalTable: "victims",
+                        name: "FK_disasters_AspNetUsers_user_id",
+                        column: x => x.user_id,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -226,17 +217,40 @@ namespace DMS.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    VictimId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    user_id = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_photos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_photos_victims_VictimId",
-                        column: x => x.VictimId,
-                        principalTable: "victims",
+                        name: "FK_photos_AspNetUsers_user_id",
+                        column: x => x.user_id,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "user_location",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Tole = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Province = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    District = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Municipality = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Ward = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    user_id = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_user_location", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_user_location_AspNetUsers_user_id",
+                        column: x => x.user_id,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -279,19 +293,19 @@ namespace DMS.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_disasters_VictimId",
+                name: "IX_disasters_user_id",
                 table: "disasters",
-                column: "VictimId");
+                column: "user_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_photos_VictimId",
+                name: "IX_photos_user_id",
                 table: "photos",
-                column: "VictimId");
+                column: "user_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_user_location_VictimId",
+                name: "IX_user_location_user_id",
                 table: "user_location",
-                column: "VictimId");
+                column: "user_id");
         }
 
         /// <inheritdoc />
@@ -313,6 +327,9 @@ namespace DMS.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "disasterCategory");
+
+            migrationBuilder.DropTable(
                 name: "disasters");
 
             migrationBuilder.DropTable(
@@ -322,10 +339,10 @@ namespace DMS.Migrations
                 name: "user_location");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
+                name: "victims");
 
             migrationBuilder.DropTable(
-                name: "victims");
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

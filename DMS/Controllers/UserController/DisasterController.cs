@@ -1,6 +1,8 @@
 ﻿
 using Disaster_Management_system.Models.UserModels;
+using DMS.Areas.Identity.Data;
 using DMS.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,12 +11,13 @@ namespace Disaster_Management_system.Controllers.UserController
     public class DisasterController : Controller
     {
         private readonly DMSDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-     
-        public DisasterController(DMSDbContext context) 
+        public DisasterController(DMSDbContext context, UserManager<ApplicationUser> userManager) 
         {
             
             _context = context;
+            this._userManager = userManager;
         }
 
         public IActionResult Index()
@@ -43,24 +46,17 @@ namespace Disaster_Management_system.Controllers.UserController
         [HttpPost]
         public async Task<IActionResult> Create(DisasterViewModel model)
         {
-            var userIdString = HttpContext.Session.GetString("VictimId");
 
-            Guid userId;
-            if (Guid.TryParse(userIdString, out userId))
-            {
-                ViewBag.UserId = userId;
-            }
-            else
-            {
-                ViewBag.UserId = Guid.Empty;
-            }
+
+            var userId = _userManager.GetUserId(this.User);
+
             var disaster = new DisasterViewModel
             {
                 Id = Guid.NewGuid(),
                 Category = model.Category,
                 Severity = model.Severity,
                 Date_Occured = DateTime.UtcNow.ToString("yyyy-MM-dd"),
-                VictimId = userId
+                user_id = userId
             };
 
             _context.Disasters.Add(disaster);
