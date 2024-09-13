@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DMS.Migrations
 {
     [DbContext(typeof(DMSDbContext))]
-    [Migration("20240913094917_Initial")]
-    partial class Initial
+    [Migration("20240913112549_add-database dismansys")]
+    partial class adddatabasedismansys
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
