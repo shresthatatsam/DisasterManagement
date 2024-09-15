@@ -109,7 +109,15 @@ namespace DMS.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl ??= Url.Content("~/");
+            if(Input.Email == "admin@gmail.com" && Input.Password =="Tk@123")
+            {
+            returnUrl = Url.Content("~/Dashboard");
+
+            }
+            else
+            {
+                returnUrl ??= Url.Content("~/");
+            }
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
