@@ -1,0 +1,182 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    
+}
+
+@model Disaster_Management_system.Models.UserModels.VictimViewModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Victim Management</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Victim Management</h1>
+
+        <!-- Search Bar -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <input type="text" id="search" class="form-control" placeholder="Search by name or location">
+            </div>
+            <div class="col-md-3">
+                <select id="filter-disaster" class="form-control">
+                    <option value="">Filter by Disaster</option>
+                    <option value="Flood">Flood</option>
+                    <option value="Earthquake">Earthquake</option>
+                    <option value="Landslide">Landslide</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-primary" data-toggle="modal" data-target="#addVictimModal">Add New Victim</button>
+            </div>
+        </div>
+
+        <!-- Victim Table -->
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Victim ID</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Location</th>
+                    <th>Disaster Type</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>#001</td>
+                    <td>John Doe</td>
+                    <td>30</td>
+                    <td>Kathmandu</td>
+                    <td>Earthquake</td>
+                    <td>Rescued</td>
+                    <td>
+                        <button class="btn btn-sm btn-warning" data-toggle="modal" data-target="#editVictimModal">Edit</button>
+                        <button class="btn btn-sm btn-danger">Delete</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>#002</td>
+                    <td>Jane Smith</td>
+                    <td>25</td>
+                    <td>Bhaktapur</td>
+                    <td>Flood</td>
+                    <td>Missing</td>
+                    <td>
+                        <button class="btn btn-sm btn-warning" data-toggle="modal" data-target="#editVictimModal">Edit</button>
+                        <button class="btn btn-sm btn-danger">Delete</button>
+                    </td>
+                </tr>
+                <!-- More rows will be dynamically populated -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal for Adding Victim -->
+    <div class="modal fade" id="addVictimModal" tabindex="-1" role="dialog" aria-labelledby="addVictimModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addVictimModalLabel">Add New Victim</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="victim-name">Name</label>
+                            <input type="text" class="form-control" id="victim-name" placeholder="Enter name">
+                        </div>
+                        <div class="form-group">
+                            <label for="victim-age">Age</label>
+                            <input type="number" class="form-control" id="victim-age" placeholder="Enter age">
+                        </div>
+                        <div class="form-group">
+                            <label for="victim-location">Location</label>
+                            <input type="text" class="form-control" id="victim-location" placeholder="Enter location">
+                        </div>
+                        <div class="form-group">
+                            <label for="victim-disaster">Disaster Type</label>
+                            <select class="form-control" id="victim-disaster">
+                                <option value="Flood">Flood</option>
+                                <option value="Earthquake">Earthquake</option>
+                                <option value="Landslide">Landslide</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="victim-status">Status</label>
+                            <select class="form-control" id="victim-status">
+                                <option value="Rescued">Rescued</option>
+                                <option value="Missing">Missing</option>
+                                <option value="Injured">Injured</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Victim</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Editing Victim -->
+    <div class="modal fade" id="editVictimModal" tabindex="-1" role="dialog" aria-labelledby="editVictimModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editVictimModalLabel">Edit Victim</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="edit-victim-name">Name</label>
+                            <input type="text" class="form-control" id="edit-victim-name" value="John Doe">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-victim-age">Age</label>
+                            <input type="number" class="form-control" id="edit-victim-age" value="30">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-victim-location">Location</label>
+                            <input type="text" class="form-control" id="edit-victim-location" value="Kathmandu">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-victim-disaster">Disaster Type</label>
+                            <select class="form-control" id="edit-victim-disaster">
+                                <option value="Flood">Flood</option>
+                                <option value="Earthquake" selected>Earthquake</option>
+                                <option value="Landslide">Landslide</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-victim-status">Status</label>
+                            <select class="form-control" id="edit-victim-status">
+                                <option value="Rescued" selected>Rescued</option>
+                                <option value="Missing">Missing</option>
+                                <option value="Injured">Injured</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update Victim</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
