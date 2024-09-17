@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<Disaster_Management_system.Models.AdminModels.DisasterCategoryViewModel>
+@{
     ViewData["Title"] = "Disaster Management";
 }
 
@@ -13,23 +14,19 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>Disaster ID</th>
+                  
                     <th>Disaster Type</th>
-                    <th>Location</th>
                     <th>Severity</th>
-                    <th>Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var disaster in Model.Disasters)
+                @foreach (var disaster in Model)
                 {
                     <tr>
-                        <td>@disaster.Id</td>
-                        <td>@disaster.Type</td>
-                        <td>@disaster.Location</td>
+                        <td>@disaster.Name</td>
                         <td>@disaster.Severity</td>
-                        <td>@disaster.Status</td>
+                     
                         <td>
                             <a href="@Url.Action("Edit", "Disasters", new { id = disaster.Id })" class="btn btn-warning btn-sm">Edit</a>
                             <a href="@Url.Action("Details", "Disasters", new { id = disaster.Id })" class="btn btn-info btn-sm">Details</a>
