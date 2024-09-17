@@ -1,0 +1,86 @@
+﻿@{
+    ViewData["Title"] = "Disaster Management";
+}
+
+<div class="container mt-5">
+    <h2>Disaster Management</h2>
+
+    <!-- Button to Add New Disaster -->
+    <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#addDisasterModal">Add New Disaster</button>
+
+    <!-- List of Disasters -->
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Disaster ID</th>
+                    <th>Disaster Type</th>
+                    <th>Location</th>
+                    <th>Severity</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var disaster in Model.Disasters)
+                {
+                    <tr>
+                        <td>@disaster.Id</td>
+                        <td>@disaster.Type</td>
+                        <td>@disaster.Location</td>
+                        <td>@disaster.Severity</td>
+                        <td>@disaster.Status</td>
+                        <td>
+                            <a href="@Url.Action("Edit", "Disasters", new { id = disaster.Id })" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="@Url.Action("Details", "Disasters", new { id = disaster.Id })" class="btn btn-info btn-sm">Details</a>
+                            <a href="@Url.Action("Delete", "Disasters", new { id = disaster.Id })" class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Add New Disaster Modal -->
+<div class="modal fade" id="addDisasterModal" tabindex="-1" role="dialog" aria-labelledby="addDisasterModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addDisasterModalLabel">Add New Disaster</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="Create" asp-controller="Disasters" method="post">
+                    <div class="form-group">
+                        <label for="disasterType">Disaster Type</label>
+                        <input type="text" class="form-control" id="disasterType" name="Type" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <input type="text" class="form-control" id="location" name="Location" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="severity">Severity</label>
+                        <select class="form-control" id="severity" name="Severity" required>
+                            <option value="Low">Low</option>
+                            <option value="Medium">Medium</option>
+                            <option value="High">High</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="status">Status</label>
+                        <select class="form-control" id="status" name="Status" required>
+                            <option value="Ongoing">Ongoing</option>
+                            <option value="Under Control">Under Control</option>
+                            <option value="Resolved">Resolved</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Disaster</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
