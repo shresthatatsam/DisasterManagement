@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DMS.Controllers
+namespace DMS.Controllers.Admin
 {
     public class VictimmanagementController : Controller
     {

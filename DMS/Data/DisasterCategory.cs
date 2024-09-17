@@ -17,6 +17,13 @@ namespace Disaster_Management_system.Data
             Model = new DisasterCategoryViewModel();
             _context = context;
         }
+
+
+        //public IEnumerable<DisasterCategoryViewModel> PostDisaster()
+        //{
+
+        //}
+
         public IEnumerable<DisasterCategoryViewModel> getAllDisasters()
         {
             var disasters = _context.DisasterCategory.Select(x => new DisasterCategoryViewModel

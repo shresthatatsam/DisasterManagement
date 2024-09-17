@@ -4,6 +4,7 @@ using DMS.Data;
 using DMS.Areas.Identity.Data;
 using Disaster_Management_system.Data.Interface;
 using Disaster_Management_system.Data;
+using DMS.Data.Interface;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DMSDbContextConnection") ?? throw new InvalidOperationException("Connection string 'DMSDbContextConnection' not found.");
 
@@ -12,6 +13,7 @@ builder.Services.AddDbContext<DMSDbContext>(options => options.UseSqlServer(conn
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false).AddRoles<IdentityRole>().AddEntityFrameworkStores<DMSDbContext>();
 
 builder.Services.AddScoped<IDisasterCategory, DisasterCategory>();
+builder.Services.AddScoped<IVictim, Victim>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
