@@ -37,7 +37,8 @@ namespace DMS.Data
                     Gender = model.Gender,
                     ContactNumber = model.ContactNumber,
                     Status = true,
-                    user_id = model.user_id
+                    user_id = model.user_id,
+
                 };
 
                 _context.Victims.Add(victim);
@@ -59,26 +60,17 @@ namespace DMS.Data
 
 
         [HttpGet]
-        public async Task<VictimViewModel> getById(Guid id)
+        public async Task<List<VictimViewModel>> getAllData()
         {
-           var victim = _context.Victims.Where(x => x.Id == id).FirstOrDefault();
-            var disaster = _context.Disasters.Where(x => x.Id == id).FirstOrDefault();
-            return victim;
-           
+           var victim = _context.Victims.Select(x => new VictimViewModel
+           {
+               Age = x.Age,
+               Disasters = x.Disasters,
+           }).ToList();
+           return victim;
         }
 
-        public class AllDataDto
-        {
-            public string Name { get; set; }
-            public string Age { get; set; }
-            public string Gender { get; set; }
-            public string ContactNumber { get; set; }
-            public string Category { get; set; }
-            public string Severity { get; set; }
-            public string Date_Occured { get; set; }
-            public bool Status { get; set; }
-
-        }
+      
 
         //public async Task<AllDataDto> getAllData()
         //{

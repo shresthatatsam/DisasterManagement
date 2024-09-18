@@ -79,9 +79,9 @@ namespace DMS.Controllers.UserController
 
 
         [HttpGet]
-      public async Task<IActionResult> getById(Guid id)
+      public async Task<IActionResult> getAllData()
         {
-           var item = _victim.getById(id);
+           var item = _victim.getAllData();
             var result = new
             {
                 Victim = item,

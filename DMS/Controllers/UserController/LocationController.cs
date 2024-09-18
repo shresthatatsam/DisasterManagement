@@ -40,7 +40,8 @@ namespace Disaster_Management_system.Controllers.UserController
                     District = model.District,
                     Municipality = model.Municipality,
                     Ward = model.Ward,
-                    user_id = userId
+                    user_id = userId,
+                    
                 };
 
                 _context.Locations.Add(location);

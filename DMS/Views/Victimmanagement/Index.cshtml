@@ -72,8 +72,35 @@
     </div>
 
   
-    <script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: '/Victim/getAllData', // Adjust the URL as necessary
+                method: 'GET',
+                success: function (data) {
+                    var tbody = $('.victimBody');
+                    console.log(data);
+                    tbody.empty(); // Clear existing data
+                    data.forEach(function (victim) {
+                        var row = '<tr>' +
+                            '<td>' + victim.Name + '</td>' +
+                            '<td>' + victim.Age + '</td>' +
+                            '<td>' + victim.Gender + '</td>' +
+                            '<td>' + victim.ContactNumber + '</td>' +
+                            '<td>' + victim.Status + '</td>' +
+                            '<td>' + victim.UserId + '</td>' +
+                            '<td>' + (victim.Disasters.length > 0 ? victim.Disasters.map(d => d.Category).join(', ') : 'None') + '</td>' +
+                            '</tr>';
+                        tbody.append(row);
+                    });
+                },
+                error: function (error) {
+                    console.error('Error fetching victims:', error);
+                }
+            });
+        });
     </script>
   
 </body>

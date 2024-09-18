@@ -46,22 +46,29 @@ namespace Disaster_Management_system.Controllers.UserController
         [HttpPost]
         public async Task<IActionResult> Create(DisasterViewModel model)
         {
-
-
-            var userId = _userManager.GetUserId(this.User);
-
-            var disaster = new DisasterViewModel
+            try
             {
-                Id = Guid.NewGuid(),
-                Category = model.Category,
-                Severity = model.Severity,
-                Date_Occured = DateTime.UtcNow.ToString("yyyy-MM-dd"),
-                user_id = userId
-            };
+                var userId = _userManager.GetUserId(this.User);
 
-            _context.Disasters.Add(disaster);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Index", "Image");
+                var disaster = new DisasterViewModel
+                {
+                    Id = Guid.NewGuid(),
+                    Category = model.Category,
+                    Severity = model.Severity,
+                    Date_Occured = DateTime.UtcNow.ToString("yyyy-MM-dd"),
+                    user_id = userId,
+                    VictimId = Guid.Parse("49C24D1B-8152-4662-8912-67D4F1F5BC12")
+                };
+
+                _context.Disasters.Add(disaster);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", "Image");
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+           
         }
 
 

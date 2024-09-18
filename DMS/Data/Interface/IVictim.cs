@@ -7,6 +7,6 @@ namespace DMS.Data.Interface
         Task<VictimViewModel> CreateVictim(VictimViewModel model);
         Task<int> CountVictimsAsync();
 
-        Task<VictimViewModel> getById(Guid id);
+        Task<List<VictimViewModel>> getAllData();
     }
 }
