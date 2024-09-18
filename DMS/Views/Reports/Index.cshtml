@@ -1,0 +1,128 @@
+﻿@{
+    ViewData["Title"] = "Reports";
+}
+
+<div class="container mt-5">
+    <h2>Reports</h2>
+
+    <!-- Tabs for different report categories -->
+    <ul class="nav nav-tabs" id="reportTabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="disaster-tab" data-toggle="tab" href="#disaster" role="tab" aria-controls="disaster" aria-selected="true">Disaster Reports</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="victim-tab" data-toggle="tab" href="#victim" role="tab" aria-controls="victim" aria-selected="false">Victim Reports</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="resource-tab" data-toggle="tab" href="#resource" role="tab" aria-controls="resource" aria-selected="false">Resource Reports</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="user-tab" data-toggle="tab" href="#user" role="tab" aria-controls="user" aria-selected="false">User Reports</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="custom-tab" data-toggle="tab" href="#custom" role="tab" aria-controls="custom" aria-selected="false">Custom Reports</a>
+        </li>
+    </ul>
+
+    <!-- Tab content -->
+    <div class="tab-content mt-3">
+        <!-- Disaster Reports -->
+        <div class="tab-pane fade show active" id="disaster" role="tabpanel" aria-labelledby="disaster-tab">
+            <h4>Disaster Reports</h4>
+            <form method="post" action="@Url.Action("GenerateDisasterReport", "Reports")">
+                <div class="form-group">
+                    <label for="disasterType">Disaster Type:</label>
+                    <select class="form-control" id="disasterType" name="disasterType">
+                        <option value="All">All</option>
+                        <option value="Earthquake">Earthquake</option>
+                        <option value="Flood">Flood</option>
+                        <option value="Fire">Fire</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="startDate">Start Date:</label>
+                    <input type="date" class="form-control" id="startDate" name="startDate">
+                </div>
+                <div class="form-group">
+                    <label for="endDate">End Date:</label>
+                    <input type="date" class="form-control" id="endDate" name="endDate">
+                </div>
+                <button type="submit" class="btn btn-primary">Generate Report</button>
+            </form>
+        </div>
+
+        <!-- Victim Reports -->
+        <div class="tab-pane fade" id="victim" role="tabpanel" aria-labelledby="victim-tab">
+            <h4>Victim Reports</h4>
+            <form method="post" action="@Url.Action("GenerateVictimReport", "Reports")">
+                <div class="form-group">
+                    <label for="location">Location:</label>
+                    <input type="text" class="form-control" id="location" name="location" placeholder="Enter location">
+                </div>
+                <div class="form-group">
+                    <label for="conditionStatus">Condition Status:</label>
+                    <select class="form-control" id="conditionStatus" name="conditionStatus">
+                        <option value="All">All</option>
+                        <option value="Injured">Injured</option>
+                        <option value="Missing">Missing</option>
+                        <option value="Deceased">Deceased</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Generate Report</button>
+            </form>
+        </div>
+
+        <!-- Resource Reports -->
+        <div class="tab-pane fade" id="resource" role="tabpanel" aria-labelledby="resource-tab">
+            <h4>Resource Reports</h4>
+            <form method="post" action="@Url.Action("GenerateResourceReport", "Reports")">
+                <div class="form-group">
+                    <label for="resourceType">Resource Type:</label>
+                    <select class="form-control" id="resourceType" name="resourceType">
+                        <option value="All">All</option>
+                        <option value="Medical Supplies">Medical Supplies</option>
+                        <option value="Food">Food</option>
+                        <option value="Equipment">Equipment</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Generate Report</button>
+            </form>
+        </div>
+
+        <!-- User Reports -->
+        <div class="tab-pane fade" id="user" role="tabpanel" aria-labelledby="user-tab">
+            <h4>User Reports</h4>
+            <form method="post" action="@Url.Action("GenerateUserReport", "Reports")">
+                <div class="form-group">
+                    <label for="userRole">User Role:</label>
+                    <select class="form-control" id="userRole" name="userRole">
+                        <option value="All">All</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Rescue Worker">Rescue Worker</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Generate Report</button>
+            </form>
+        </div>
+
+        <!-- Custom Reports -->
+        <div class="tab-pane fade" id="custom" role="tabpanel" aria-labelledby="custom-tab">
+            <h4>Custom Reports</h4>
+            <form method="post" action="@Url.Action("GenerateCustomReport", "Reports")">
+                <div class="form-group">
+                    <label for="customFilter">Custom Filter:</label>
+                    <input type="text" class="form-control" id="customFilter" name="customFilter" placeholder="Enter custom filter">
+                </div>
+                <button type="submit" class="btn btn-primary">Generate Report</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Export Options -->
+    <div class="mt-4">
+        <button class="btn btn-success">Export to PDF</button>
+        <button class="btn btn-info">Export to Excel</button>
+        <button class="btn btn-warning">Export to CSV</button>
+    </div>
+</div>
+
