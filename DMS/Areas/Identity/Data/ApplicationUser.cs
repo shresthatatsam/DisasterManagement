@@ -19,6 +19,8 @@ public class ApplicationUser : IdentityUser
     [Column(TypeName = "nvarchar(100)")]
     public string LastName { get; set; }
 
+
+    public ICollection<VictimViewModel> Victims { get; set; }
     public ICollection<LocationViewModel> Locations { get; set; }
     public ICollection<PhotosViewModel> Photos { get; set; }
     public ICollection<DisasterViewModel> Disasters { get; set; }

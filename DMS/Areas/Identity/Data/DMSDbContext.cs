@@ -53,6 +53,10 @@ public class DMSDbContext : IdentityDbContext<ApplicationUser>
             entity.Property(e => e.Gender).IsRequired();
             entity.Property(e => e.ContactNumber).IsRequired();
             entity.Property(e => e.Status).IsRequired();
+            entity.HasOne(p => p.user)
+             .WithMany(v => v.Victims)
+             .HasForeignKey(p => p.user_id)
+             .OnDelete(DeleteBehavior.Restrict);
         });
 
         builder.Entity<DisasterViewModel>(entity =>

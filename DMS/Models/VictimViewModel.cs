@@ -1,4 +1,6 @@
-﻿namespace Disaster_Management_system.Models.UserModels
+﻿using DMS.Areas.Identity.Data;
+
+namespace Disaster_Management_system.Models.UserModels
 {
     public class VictimViewModel
     {
@@ -8,8 +10,10 @@
         public string Gender { get; set; }
         public string ContactNumber { get; set; }
         public bool Status { get; set; }
-        //public ICollection<PhotosViewModel> Photos { get; set; }
-        ////public ICollection<LocationViewModel> Locations { get; set; }
-        //public ICollection<DisasterViewModel> Disasters { get; set; }
+        public string user_id { get; set; }
+
+        // Navigation properties
+        public ApplicationUser user { get; set; }
+               public DisasterViewModel Disasters { get; set; }
     }
 }

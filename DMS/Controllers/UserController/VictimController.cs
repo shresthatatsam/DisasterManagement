@@ -57,10 +57,13 @@ namespace DMS.Controllers.UserController
         [HttpPost]
         public async Task<IActionResult> Create(VictimViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(model); // Optionally return the view with model validation errors
-            }
+            model.user_id = _userManager.GetUserId(this.User);
+            //model.user = _userManager.GetUserAsync(this.User);
+            //model.user = _userManager.GetUserName(this.User);
+            //if (!ModelState.IsValid)
+            //{
+            //    return View(model); // Optionally return the view with model validation errors
+            //}
 
             try
             {
@@ -74,6 +77,30 @@ namespace DMS.Controllers.UserController
             }
         }
 
+
+        [HttpGet]
+      public async Task<IActionResult> getById(Guid id)
+        {
+           var item = _victim.getById(id);
+            var result = new
+            {
+                Victim = item,
+            };
+
+            return Json(result);
+        }
+
+
+        //public async Task<IActionResult> getAllData()
+        //{
+           
+        //    var result = new
+        //    {
+        //        Victim = item,
+        //    };
+
+        //    return Json(result);
+        //}
 
     }
 }
