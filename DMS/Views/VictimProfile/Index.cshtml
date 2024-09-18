@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewData["Title"] = "Victim Profile";
+}
+
+<div class="container mt-5">
+    <h2>Victim Profile</h2>
+    <div class="card">
+        <div class="card-body">
+            <h4>Personal Information</h4>
+            <p><strong>Name:</strong> @Model.Name</p>
+            <p><strong>Age:</strong> @Model.Age</p>
+            <p><strong>Gender:</strong> @Model.Gender</p>
+
+            <h4>Location Information</h4>
+            <p><strong>Address:</strong> @Model.Address</p>
+            <p><strong>District:</strong> @Model.District</p>
+
+            <h4>Disaster Information</h4>
+            <p><strong>Disaster Type:</strong> @Model.DisasterType</p>
+            <p><strong>Description:</strong> @Model.DisasterDescription</p>
+
+            <h4>Photo</h4>
+            <img src="@Model.PhotoUrl" alt="Victim's Photo" class="img-thumbnail" width="200px">
+
+            <button class="btn btn-primary mt-3" onclick="window.print()">Print Profile</button>
+        </div>
+    </div>
+</div>
+
+
