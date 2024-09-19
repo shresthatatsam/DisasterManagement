@@ -24,43 +24,8 @@ namespace DMS.Data
             _context = context;
             this._httpContextAccessor = httpContextAccessor;
         }
-        //public async Task<VictimViewModel> CreateVictim(VictimViewModel model)
-        //{
-        //    try
-        //    {
-        //      var existingUser =  _context.Victims.Where(x => x.ContactNumber == model.ContactNumber).FirstOrDefault();
-
-        //        if (existingUser !=null)
-        //        {
-
-        //        }
-
-        //        var victim = new VictimViewModel
-        //        {
-        //            Id = Guid.NewGuid(),
-        //            Name = model.Name,
-        //            Age = model.Age,
-        //            Gender = model.Gender,
-        //            ContactNumber = model.ContactNumber,
-        //            Status = true,
-        //            user_id = model.user_id,
-
-        //        };
-
-        //        _context.Victims.Add(victim);
-        //        await _context.SaveChangesAsync();
-        //      _httpContextAccessor.HttpContext.Session.SetString("VictimId", victim.Id.ToString());
-        //        return victim;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // Optionally, log the exception or handle it accordingly
-        //        throw new ApplicationException("An error occurred while creating the victim.", ex);
-        //    }
-        //}
-
-
-        public async Task<VictimViewModel> CreateVictim(VictimViewModel model)
+       
+       public async Task<VictimViewModel> CreateVictim(VictimViewModel model)
         {
             try
             {
@@ -70,18 +35,13 @@ namespace DMS.Data
 
                 if (existingVictim != null)
                 {
-                    // Update the existing victim's details
                     existingVictim.Name = model.Name;
                     existingVictim.Age = model.Age;
                     existingVictim.Gender = model.Gender;
-                    existingVictim.Status = true; // You may want to change this logic
+                    existingVictim.Status = true; 
                     existingVictim.user_id = model.user_id;
-
-                    // Update the record in the database
                     _context.Victims.Update(existingVictim);
                     await _context.SaveChangesAsync();
-
-                    // Store the victim ID in session
                     _httpContextAccessor.HttpContext.Session.SetString("VictimId", existingVictim.Id.ToString());
                     return existingVictim;
                 }
@@ -100,8 +60,6 @@ namespace DMS.Data
 
                     _context.Victims.Add(victim);
                     await _context.SaveChangesAsync();
-
-                    // Store the victim ID in session
                     _httpContextAccessor.HttpContext.Session.SetString("VictimId", victim.Id.ToString());
                     return victim;
 
@@ -131,18 +89,21 @@ namespace DMS.Data
         {
            var victim = _context.Victims.Select(x => new VictimViewModel
            {
+               Id=x.Id,
+               Name = x.Name,
+               Gender=x.Gender,
+               ContactNumber = x.ContactNumber, 
+               Status=x.Status,
                Age = x.Age,
                Disasters = x.Disasters,
+               Locations = x.Locations,
+               
            }).ToList();
            return victim;
         }
 
       
 
-        //public async Task<AllDataDto> getAllData()
-        //{
-          
-        //}
-
+       
     }
 }

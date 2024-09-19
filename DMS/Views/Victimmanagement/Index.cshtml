@@ -36,7 +36,7 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Victim ID</th>
+                    @* <th>Victim ID</th> *@
                     <th>Name</th>
                     <th>Age</th>
                     <th>Location</th>
@@ -81,24 +81,31 @@
                 method: 'GET',
                 success: function (data) {
                     var tbody = $('.victimBody');
-                    console.log(data);
+                    console.log(data.victim.result); // Log the data for inspection
                     tbody.empty(); // Clear existing data
-                    data.forEach(function (victim) {
-                        var row = '<tr>' +
-                            '<td>' + victim.Name + '</td>' +
-                            '<td>' + victim.Age + '</td>' +
-                            '<td>' + victim.Gender + '</td>' +
-                            '<td>' + victim.ContactNumber + '</td>' +
-                            '<td>' + victim.Status + '</td>' +
-                            '<td>' + victim.UserId + '</td>' +
-                            '<td>' + (victim.Disasters.length > 0 ? victim.Disasters.map(d => d.Category).join(', ') : 'None') + '</td>' +
-                            '</tr>';
-                        tbody.append(row);
-                    });
-                },
-                error: function (error) {
-                    console.error('Error fetching victims:', error);
+
+                    // Check if the response has the expected structure
+                    if (data.victim && Array.isArray(data.victim.result)) {
+                        data.victim.result.forEach(function (victim) {
+                            var row = '<tr>' +
+                                '<td>' + victim.name + '</td>' +
+                                '<td>' + victim.age + '</td>' +
+                                '<td>' + victim.locations[0].tole + '</td>' +
+                                '<td>' + victim.disasters[0].category + '</td>' +
+                                '<td>' + victim.status + '</td>' +
+                                '<td>' +
+                                '<button class="btn btn-success edit-btn" data-id="' + victim.id + '">Edit</button>' +
+                                '<button class="btn btn-danger delete-btn" data-id="' + victim.id + '">Delete</button>' +
+                                '</td>' +
+                                '</tr>';
+                            tbody.append(row);
+                        });
+                    } else {
+                        console.error('Expected an array but got:', data);
+                        tbody.append('<tr><td colspan="7">No victims found.</td></tr>');
+                    }
                 }
+
             });
         });
     </script>
