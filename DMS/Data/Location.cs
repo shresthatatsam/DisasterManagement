@@ -3,18 +3,20 @@ using DMS.Areas.Identity.Data;
 using DMS.Data.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace DMS.Data
 {
-    public class Disaster :IDisaster
+    public class Location :ILocation
     {
         public readonly DMSDbContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
+
         public DisasterViewModel Model { get; set; }
 
+       
 
-        public Disaster(DMSDbContext context, IHttpContextAccessor httpContextAccessor)
+
+        public Location(DMSDbContext context, IHttpContextAccessor httpContextAccessor)
         {
             Model = new DisasterViewModel();
             _context = context;
@@ -22,8 +24,8 @@ namespace DMS.Data
             
         }
 
-        [HttpPost]
-        public async Task<DisasterViewModel> Create(DisasterViewModel model)
+
+        public async Task<LocationViewModel> Create(LocationViewModel model)
         {
             try
             {
@@ -33,48 +35,45 @@ namespace DMS.Data
                 {
                     throw new ApplicationException("Victim ID is not found in session.");
                 }
-
-                var existingRecord = _context.Disasters
-                    .Where(x => x.VictimId == Guid.Parse(victimId)).FirstOrDefault();
-
+                var existingRecord = _context.Locations
+                   .Where(x => x.VictimId == Guid.Parse(victimId)).FirstOrDefault();
                 if (existingRecord != null)
                 {
                     // Update existing record
-                    existingRecord.Category = model.Category;
-                    existingRecord.Severity = model.Severity;
-                    existingRecord.Date_Occured = DateTime.UtcNow.ToString("yyyy-MM-dd");
+                    existingRecord.Tole = model.Tole;
+                    existingRecord.Province = model.Province;
+                    existingRecord.District = model.District;
+                    existingRecord.Municipality = model.Municipality;
+                    existingRecord.Ward = model.Ward;
                     existingRecord.user_id = model.user_id;
 
-                    _context.Disasters.Update(existingRecord);
-                    await _context.SaveChangesAsync();
-
-                    return existingRecord;
+                    _context.Locations.Update(existingRecord);
                 }
                 else
                 {
-                    // Create new record
-                    var disaster = new DisasterViewModel
+                   
+                    var location = new LocationViewModel
                     {
                         Id = Guid.NewGuid(),
-                        Category = model.Category,
-                        Severity = model.Severity,
-                        Date_Occured = DateTime.UtcNow.ToString("yyyy-MM-dd"),
+                        Tole = model.Tole,
+                        Province = model.Province,
+                        District = model.District,
+                        Municipality = model.Municipality,
+                        Ward = model.Ward,
                         user_id = model.user_id,
                         VictimId = Guid.Parse(victimId)
                     };
 
-                    _context.Disasters.Add(disaster);
-                     await _context.SaveChangesAsync();
-                return disaster;
+                    await _context.Locations.AddAsync(location);
                 }
 
+                await _context.SaveChangesAsync();
+                return model;
             }
             catch (Exception ex)
             {
-                // Log the exception or handle it accordingly
                 throw new ApplicationException("An error occurred while handling the disaster record.", ex);
             }
-
         }
 
 

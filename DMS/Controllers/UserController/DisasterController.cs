@@ -2,6 +2,7 @@
 using Disaster_Management_system.Models.UserModels;
 using DMS.Areas.Identity.Data;
 using DMS.Data;
+using DMS.Data.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,13 +11,12 @@ namespace Disaster_Management_system.Controllers.UserController
 {
     public class DisasterController : Controller
     {
-        private readonly DMSDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
-
-        public DisasterController(DMSDbContext context, UserManager<ApplicationUser> userManager) 
+        public IDisaster _disaster;
+        public DisasterController(IDisaster disaster, UserManager<ApplicationUser> userManager) 
         {
             
-            _context = context;
+           this._disaster = disaster;
             this._userManager = userManager;
         }
 
@@ -27,41 +27,19 @@ namespace Disaster_Management_system.Controllers.UserController
            
         }
 
-        //[HttpGet]
-        //public IActionResult GetDisasterDropdownOptions()
-        //{
-        //    var disasterList = _disasterCategory.getAllDisasters();
-
-        //    return View("Index" , disasterList);
-        //}
-
-        //[HttpGet]
-        //public IActionResult getDisasterCategoryByName(Guid id)
-        //{
-        //   //var data= _disasterCategory.getDisastersByName(id);
-        //    return Json();
-        //}
-
+       
 
         [HttpPost]
         public async Task<IActionResult> Create(DisasterViewModel model)
         {
             try
             {
-                var userId = _userManager.GetUserId(this.User);
+             
 
-                var disaster = new DisasterViewModel
-                {
-                    Id = Guid.NewGuid(),
-                    Category = model.Category,
-                    Severity = model.Severity,
-                    Date_Occured = DateTime.UtcNow.ToString("yyyy-MM-dd"),
-                    user_id = userId,
-                    VictimId = Guid.Parse("49C24D1B-8152-4662-8912-67D4F1F5BC12")
-                };
+                model.user_id = _userManager.GetUserId(this.User);
 
-                _context.Disasters.Add(disaster);
-                await _context.SaveChangesAsync();
+               await _disaster.Create(model);
+               
                 return RedirectToAction("Index", "Image");
             }
             catch(Exception ex)
