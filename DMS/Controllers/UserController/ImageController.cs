@@ -1,6 +1,7 @@
 ﻿using Disaster_Management_system.Models.UserModels;
 using DMS.Areas.Identity.Data;
 using DMS.Data;
+using DMS.Data.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,13 +11,13 @@ namespace Disaster_Management_system.Controllers.UserController
     public class ImageController : Controller
     {
 
-        private readonly DMSDbContext _context;
+        private readonly IPhotos _Photos;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public ImageController(DMSDbContext context, UserManager<ApplicationUser> userManager)
+        public ImageController(IPhotos Photos, UserManager<ApplicationUser> userManager)
         {
 
-            _context = context;
+            _Photos = Photos;   
             this._userManager = userManager;
         }
 
@@ -33,36 +34,45 @@ namespace Disaster_Management_system.Controllers.UserController
             public List<IFormFile> Photos { get; set; }
         }
 
+        //[HttpPost]
+        //public async IActionResult Create([FromForm] PhotoUploadViewModel model)
+        //{
+        //    var userId = _userManager.GetUserId(this.User);
+        //    // Process each file in the Photos collection
+        //    foreach (var photo in model.Photos)
+        //    {
+        //        if (photo != null && photo.Length > 0)
+        //        {
+        //            // Optionally, process the file (e.g., save to disk or cloud storage)
+        //            using (var memoryStream = new MemoryStream())
+        //            {
+        //               await photo.CopyToAsync(memoryStream);
+        //                var photoData = new PhotosViewModel
+        //                {
+        //                    Description = model.Description,
+        //                    Date = model.Date,
+        //                    Url = Convert.ToBase64String(memoryStream.ToArray()),
+        //                    user_id = userId
+        //                };
+
+        //                _context.Photos.Add(photoData);
+        //                _context.SaveChangesAsync();
+        //            }
+        //        }
+        //    }
+
+        //    return Json(new { success = true });
+        //}
+
         [HttpPost]
-        public IActionResult Create([FromForm] PhotoUploadViewModel model)
+        public async Task<IActionResult> Create([FromForm] PhotoUploadViewModel model , PhotosViewModel photosViewModel)
         {
-            var userId = _userManager.GetUserId(this.User);
-            // Process each file in the Photos collection
-            foreach (var photo in model.Photos)
-            {
-                if (photo != null && photo.Length > 0)
-                {
-                    // Optionally, process the file (e.g., save to disk or cloud storage)
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        photo.CopyToAsync(memoryStream);
-                        var photoData = new PhotosViewModel
-                        {
-                            Description = model.Description,
-                            Date = model.Date,
-                            Url = Convert.ToBase64String(memoryStream.ToArray()),
-                            user_id = userId
-                        };
+           
+            photosViewModel.user_id = _userManager.GetUserId(this.User);
 
-                        _context.Photos.Add(photoData);
-                        _context.SaveChangesAsync();
-                    }
-                }
-            }
-
+           await _Photos.Create(model, photosViewModel);
             return Json(new { success = true });
         }
-
 
 
 

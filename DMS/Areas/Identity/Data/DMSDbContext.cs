@@ -90,6 +90,10 @@ public class DMSDbContext : IdentityDbContext<ApplicationUser>
             entity.HasOne(p => p.user)
                   .WithMany(v => v.Photos)
                   .HasForeignKey(p => p.user_id);
+            entity.HasOne(p => p.Victim)
+         .WithMany(v => v.Photos)
+         .HasForeignKey(p => p.VictimId)
+         .OnDelete(DeleteBehavior.Restrict);
         });
 
         builder.Entity<DisasterCategoryViewModel>(entity =>
