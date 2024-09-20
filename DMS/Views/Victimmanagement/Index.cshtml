@@ -179,6 +179,51 @@
             });
 
 
+            $(document).on('click', '.edit-btn', function () {
+                var victimId = $(this).data('id');
+
+                $.ajax({
+                    url: '/victim/getDataById',
+                    method: 'GET',
+                    data: { id: victimId },
+                    success: function (response) {
+                        console.log(response.victim.result);
+                        if (response.victim) {
+                            var victim = response.victim.result;
+                            $('#Name').val(victim.name);
+                            $('#Age').val(victim.age);
+                            $('#Gender').val(victim.gender);
+                            $('#ContactNumber').val(victim.contactNumber);
+                            $('#Tole').val(victim.locations[0].tole);
+                            $('#Province').val(victim.locations[0].province);
+                            $('#District').val(victim.locations[0].district);
+                            $('#Municipality').val(victim.locations[0].municipality);
+                            $('#Ward').val(victim.locations[0].ward);
+
+                            $('#Category').val(victim.disasters[0].category);
+                            $('#Severity').val(victim.disasters[0].severity);
+                            $('#Date_Occured').val(victim.disasters[0].date_Occured);
+                            
+                            
+                            
+                            
+                            
+                            
+                            // $('#victimLocation').val(victim.locations[0].tole);
+                            // $('#victimDisasterCategory').val(victim.disasters[0].category);
+                            // $('#victimStatus').val(victim.status);
+                            // $('#victimId').val(victim.id);
+
+                            $('#addVictimModal').modal('show');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error fetching data:', error);
+                    }
+                });
+            });
+
+
           
           $(document).on('click', '.view-btn', function () {
     var victimId = $(this).data('id');
