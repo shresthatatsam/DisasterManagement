@@ -102,8 +102,24 @@ namespace DMS.Data
            return victim;
         }
 
-      
+        [HttpGet]
+        public async Task<VictimViewModel> getDataById(Guid id)
+        {
+            var victim = _context.Victims.Where(x=>x.Id == id).Select(x => new VictimViewModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Gender = x.Gender,
+                ContactNumber = x.ContactNumber,
+                Status = x.Status,
+                Age = x.Age,
+                Disasters = x.Disasters,
+                Locations = x.Locations,
 
-       
+            }).FirstOrDefault();
+            return victim;
+        }
+
+
     }
 }

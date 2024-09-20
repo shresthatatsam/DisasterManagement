@@ -60,9 +60,19 @@ namespace DMS.Controllers.UserController
 
             return Json(result);
         }
+        [HttpGet]
+        public async Task<IActionResult> getDataById(Guid id)
+        {
+            var item = _victim.getDataById(id);
+            var result = new
+            {
+                Victim = item,
+            };
+
+            return Json(result);
+        }
 
 
-      
 
     }
 }
