@@ -7,13 +7,20 @@ using Disaster_Management_system.Data;
 using DMS.Data.Interface;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DMSDbContextConnection") ?? throw new InvalidOperationException("Connection string 'DMSDbContextConnection' not found.");
-
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddDbContext<DMSDbContext>(options => options.UseSqlServer(connectionString));
-
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromSeconds(60); // Set session timeout
+    options.Cookie.HttpOnly = true; // Prevent client-side access
+    options.Cookie.IsEssential = true; // Make the session cookie essential
+});
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false).AddRoles<IdentityRole>().AddEntityFrameworkStores<DMSDbContext>();
 
 builder.Services.AddScoped<IDisasterCategory, DisasterCategory>();
 builder.Services.AddScoped<IVictim, Victim>();
+builder.Services.AddScoped<IDisaster, Disaster>();
+builder.Services.AddScoped<ILocation, Location>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
@@ -29,7 +36,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+app.UseSession();
 app.UseRouting();
 
 app.UseAuthorization();

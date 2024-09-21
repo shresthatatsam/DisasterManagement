@@ -16,5 +16,6 @@ namespace Disaster_Management_system.Models.UserModels
         // Navigation properties
         public ApplicationUser user { get; set; }
         public virtual ICollection<DisasterViewModel> Disasters { get; set; } = new List<DisasterViewModel>();
+        public virtual ICollection<LocationViewModel> Locations { get; set; } = new List<LocationViewModel>();
     }
 }

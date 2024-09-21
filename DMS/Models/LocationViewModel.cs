@@ -16,5 +16,8 @@ namespace Disaster_Management_system.Models.UserModels
 
         // Navigation properties
         public ApplicationUser user { get; set; }
+
+        public Guid VictimId { get; set; }
+        public virtual VictimViewModel Victim { get; set; }
     }
 }

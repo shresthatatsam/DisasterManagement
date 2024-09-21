@@ -42,6 +42,10 @@ public class DMSDbContext : IdentityDbContext<ApplicationUser>
               .WithMany(v => v.Locations)
               .HasForeignKey(p => p.user_id)
               .OnDelete(DeleteBehavior.Restrict);
+            entity.HasOne(p => p.Victim)
+          .WithMany(v => v.Locations)
+          .HasForeignKey(p => p.VictimId)
+          .OnDelete(DeleteBehavior.Restrict);
         });
 
         builder.Entity<VictimViewModel>(entity =>
