@@ -12,12 +12,16 @@ namespace DMS.Controllers.UserController
     public class VictimController : Controller
     {
         private readonly IVictim _victim;
+        private readonly ILocation _Location;
+        private readonly IDisaster _Disaster;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public VictimController(IVictim victim,UserManager<ApplicationUser> userManager)
+        public VictimController(IVictim victim , ILocation Location, IDisaster Disaster, UserManager<ApplicationUser> userManager)
         {
 
             _victim = victim;
+            _Location = Location;
+            _Disaster = Disaster;   
             this._userManager = userManager;
         }
         public IActionResult Index()
@@ -26,45 +30,12 @@ namespace DMS.Controllers.UserController
             return View();
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> Create(VictimViewModel model)
-        //{
-        //    try
-        //    {
-        //        var victim = new VictimViewModel
-        //        {
-        //            Id = Guid.NewGuid(),
-        //            Name = model.Name,
-        //            Age = model.Age,
-        //            Gender = model.Gender,
-        //            ContactNumber = model.ContactNumber,
-        //            Status = true,
-
-        //        };
-
-        //        _context.Victims.Add(victim);
-        //        await _context.SaveChangesAsync();
-        //    return RedirectToAction("Index", "Location");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // Optionally, return a custom error view or message
-        //        return StatusCode(500, "Internal server error");
-        //    }
-
-        //}
-
+        
         [HttpPost]
         public async Task<IActionResult> Create(VictimViewModel model)
         {
             model.user_id = _userManager.GetUserId(this.User);
-            //model.user = _userManager.GetUserAsync(this.User);
-            //model.user = _userManager.GetUserName(this.User);
-            //if (!ModelState.IsValid)
-            //{
-            //    return View(model); // Optionally return the view with model validation errors
-            //}
-
+           
             try
             {
                 await _victim.CreateVictim(model);
@@ -89,18 +60,19 @@ namespace DMS.Controllers.UserController
 
             return Json(result);
         }
+        [HttpGet]
+        public async Task<IActionResult> getDataById(Guid id)
+        {
+            var item = _victim.getDataById(id);
+            var result = new
+            {
+                Victim = item,
+            };
+
+            return Json(result);
+        }
 
 
-        //public async Task<IActionResult> getAllData()
-        //{
-           
-        //    var result = new
-        //    {
-        //        Victim = item,
-        //    };
-
-        //    return Json(result);
-        //}
 
     }
 }

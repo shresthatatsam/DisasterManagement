@@ -21,6 +21,7 @@ builder.Services.AddScoped<IDisasterCategory, DisasterCategory>();
 builder.Services.AddScoped<IVictim, Victim>();
 builder.Services.AddScoped<IDisaster, Disaster>();
 builder.Services.AddScoped<ILocation, Location>();
+    builder.Services.AddScoped<IPhotos, Photos>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();

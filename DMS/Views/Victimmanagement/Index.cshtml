@@ -1,6 +1,61 @@
 ﻿
 @model Disaster_Management_system.Models.UserModels.VictimViewModel
 
+
+
+<!-- Modal -->
+<!-- Modal -->
+<div id="victimModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Victim Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="victimForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="victimName">Name</label>
+                                <input type="text" class="form-control" id="victimName" required readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="victimAge">Age</label>
+                                <input type="number" class="form-control" id="victimAge" required readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="victimLocation">Location</label>
+                                <input type="text" class="form-control" id="victimLocation" required readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="victimDisasterCategory">Disaster Category</label>
+                                <input type="text" class="form-control" id="victimDisasterCategory" required readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="victimStatus">Status</label>
+                                <input type="text" class="form-control" id="victimStatus" required readonly>
+                            </div>
+                            <input type="hidden" id="victimId">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="printVictimBtn">Print</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,6 +66,11 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+
+    <!-- Modal -->
+
+
+
     <div class="content">
         <h1>Victim Management</h1>
 
@@ -36,7 +96,7 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Victim ID</th>
+                    @* <th>Victim ID</th> *@
                     <th>Name</th>
                     <th>Age</th>
                     <th>Location</th>
@@ -73,33 +133,175 @@
 
   
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <!-- jQuery and Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 
     <script>
         $(document).ready(function () {
+
+            
+
+
             $.ajax({
                 url: '/Victim/getAllData', // Adjust the URL as necessary
                 method: 'GET',
                 success: function (data) {
                     var tbody = $('.victimBody');
-                    console.log(data);
+                    console.log(data.victim.result); // Log the data for inspection
                     tbody.empty(); // Clear existing data
-                    data.forEach(function (victim) {
-                        var row = '<tr>' +
-                            '<td>' + victim.Name + '</td>' +
-                            '<td>' + victim.Age + '</td>' +
-                            '<td>' + victim.Gender + '</td>' +
-                            '<td>' + victim.ContactNumber + '</td>' +
-                            '<td>' + victim.Status + '</td>' +
-                            '<td>' + victim.UserId + '</td>' +
-                            '<td>' + (victim.Disasters.length > 0 ? victim.Disasters.map(d => d.Category).join(', ') : 'None') + '</td>' +
-                            '</tr>';
-                        tbody.append(row);
-                    });
-                },
-                error: function (error) {
-                    console.error('Error fetching victims:', error);
+
+                    // Check if the response has the expected structure
+                    if (data.victim && Array.isArray(data.victim.result)) {
+                        data.victim.result.forEach(function (victim) {
+                            var row = '<tr>' +
+                                '<td>' + victim.name + '</td>' +
+                                '<td>' + victim.age + '</td>' +
+                                '<td>' + victim.locations[0].tole + '</td>' +
+                                '<td>' + victim.disasters[0].category + '</td>' +
+                                '<td>' + victim.status + '</td>' +
+                                '<td>' +
+                                '<button class="btn btn-success view-btn" data-id="' + victim.id + '"> View </button>' +
+                                '<button class="btn btn-success edit-btn ml-2" data-id="' + victim.id + '"> Edit </button>' +
+                                // '<button class="btn btn-danger delete-btn" data-id="' + victim.id + '">Delete</button>' +
+                                '</td>' +
+                                '</tr>';
+                            tbody.append(row);
+                        });
+                    } else {
+                        console.error('Expected an array but got:', data);
+                        tbody.append('<tr><td colspan="7">No victims found.</td></tr>');
+                    }
                 }
+
             });
+
+
+            $(document).on('click', '.edit-btn', function () {
+                var victimId = $(this).data('id');
+
+                $.ajax({
+                    url: '/victim/getDataById',
+                    method: 'GET',
+                    data: { id: victimId },
+                    success: function (response) {
+                        console.log(response.victim.result);
+                        if (response.victim) {
+                            var victim = response.victim.result;
+                            $('#Name').val(victim.name);
+                            $('#Age').val(victim.age);
+                            $('#Gender').val(victim.gender);
+                            $('#ContactNumber').val(victim.contactNumber);
+                            $('#Tole').val(victim.locations[0].tole);
+                            $('#Province').val(victim.locations[0].province);
+                            $('#District').val(victim.locations[0].district);
+                            $('#Municipality').val(victim.locations[0].municipality);
+                            $('#Ward').val(victim.locations[0].ward);
+
+                            $('#Category').val(victim.disasters[0].category);
+                            $('#Severity').val(victim.disasters[0].severity);
+                            $('#Date_Occured').val(victim.disasters[0].date_Occured);
+                            
+                            
+                            
+                            
+                            
+                            
+                            // $('#victimLocation').val(victim.locations[0].tole);
+                            // $('#victimDisasterCategory').val(victim.disasters[0].category);
+                            // $('#victimStatus').val(victim.status);
+                            // $('#victimId').val(victim.id);
+
+                            $('#addVictimModal').modal('show');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error fetching data:', error);
+                    }
+                });
+            });
+
+
+          
+          $(document).on('click', '.view-btn', function () {
+    var victimId = $(this).data('id');
+
+    $.ajax({
+        url: '/victim/getDataById',
+        method: 'GET',
+        data: { id: victimId },
+        success: function (response) {
+            if (response.victim) {
+                var victim = response.victim.result;
+                $('#victimName').val(victim.name);
+                $('#victimAge').val(victim.age);
+                $('#victimLocation').val(victim.locations[0].tole);
+                $('#victimDisasterCategory').val(victim.disasters[0].category);
+                $('#victimStatus').val(victim.status);
+                $('#victimId').val(victim.id);
+
+                $('#victimModal').modal('show');
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('Error fetching data:', error);
+        }
+    });
+});
+
+$(document).on('click', '#printVictimBtn', function () {
+    // Get the HTML content of the modal body
+    var printContent = `
+        <div class="container">
+            <h5>Victim Details</h5>
+            <form>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label><strong>Name:</strong></label>
+                            <p>${$('#victimName').val()}</p>
+                        </div>
+                        <div class="form-group">
+                            <label><strong>Age:</strong></label>
+                            <p>${$('#victimAge').val()}</p>
+                        </div>
+                        <div class="form-group">
+                            <label><strong>Location:</strong></label>
+                            <p>${$('#victimLocation').val()}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label><strong>Disaster Category:</strong></label>
+                            <p>${$('#victimDisasterCategory').val()}</p>
+                        </div>
+                        <div class="form-group">
+                            <label><strong>Status:</strong></label>
+                            <p>${$('#victimStatus').val()}</p>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    `;
+
+    var printWindow = window.open('', '', 'height=600,width=800');
+    printWindow.document.write('<html><head><title>Print</title>');
+    printWindow.document.write('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">');
+    printWindow.document.write('</head><body>');
+    printWindow.document.write(printContent);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+
+    printWindow.onload = function () {
+        printWindow.print();
+        printWindow.close();
+    };
+});
+
+
         });
     </script>
   

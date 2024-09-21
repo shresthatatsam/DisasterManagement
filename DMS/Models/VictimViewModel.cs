@@ -17,5 +17,7 @@ namespace Disaster_Management_system.Models.UserModels
         public ApplicationUser user { get; set; }
         public virtual ICollection<DisasterViewModel> Disasters { get; set; } = new List<DisasterViewModel>();
         public virtual ICollection<LocationViewModel> Locations { get; set; } = new List<LocationViewModel>();
+
+        public virtual ICollection<PhotosViewModel> Photos { get; set; } = new List<PhotosViewModel>();
     }
 }
