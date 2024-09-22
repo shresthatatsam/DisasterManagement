@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DMS.Controllers.Admin
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public class DisastermanagementController : Controller
     {
 
@@ -26,6 +26,22 @@ namespace DMS.Controllers.Admin
             return View(disasters);
         }
 
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var disasters = _disasterService.getAllDisasters();
+
+            return Json(disasters);
+        }
+
+        [HttpGet]
+        public IActionResult getDisasterCategoryByName(Guid id)
+        {
+      
+            var disasters = _disasterService.getDisastersByName(id);
+
+            return Json(disasters);
+        }
 
         [HttpPost]
         public IActionResult Create(DisasterCategoryViewModel disasterCategoryViewModel)
