@@ -1,6 +1,13 @@
-﻿@{
+﻿
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+
+
+@* @{
     ViewData["Title"] = "Reports";
 }
+
 
 <div class="container mt-5">
     <h2>Reports</h2>
@@ -126,3 +133,114 @@
     </div>
 </div>
 
+ *@
+
+@{
+    ViewData["Title"] = "Reports";
+}
+
+<div class="container mt-5">
+    <h2>Reports</h2>
+
+    <ul class="nav nav-tabs" id="reportTabs" role="tablist">
+        <!-- Tab items remain unchanged -->
+    </ul>
+
+    <div class="tab-content mt-3">
+        <div class="tab-pane fade show active" id="disaster" role="tabpanel" aria-labelledby="disaster-tab">
+            <h4>Disaster Reports</h4>
+            <form method="post" action="@Url.Action("GenerateDisasterReport", "Reports")">
+                <div class="form-group">
+                    <label for="disasterType">Disaster Type:</label>
+                    <select class="form-control" id="disasterType" name="disasterType">
+                        <option value="All">All</option>
+                        <option value="Earthquake">Earthquake</option>
+                        <option value="Flood">Flood</option>
+                        <option value="Fire">Fire</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="startDate">Start Date:</label>
+                    <input type="date" class="form-control" id="startDate" name="startDate">
+                </div>
+                <div class="form-group">
+                    <label for="endDate">End Date:</label>
+                    <input type="date" class="form-control" id="endDate" name="endDate">
+                </div>
+                <button type="submit" class="btn btn-primary">Generate Report</button>
+            </form>
+
+            <!-- DataTable for displaying results -->
+            <table id="disasterTable" class="display mt-4" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Disaster Type</th>
+                        <th>Date</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data will be populated here by DataTables -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Other tabs remain unchanged -->
+    </div>
+
+    <!-- Export Options -->
+    <div class="mt-4">
+        <button class="btn btn-success" id="exportPdfBtn">Export to PDF</button>
+        <button class="btn btn-info" id="exportExcelBtn">Export to Excel</button>
+        <button class="btn btn-warning" id="exportCsvBtn">Export to CSV</button>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#disasterTable').DataTable();
+
+        // Use AJAX to fetch disaster reports on form submission
+        $('form').on('submit', function (e) {
+            e.preventDefault(); // Prevent the default form submission
+
+            var formData = $(this).serialize(); // Serialize form data
+
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                data: formData,
+                success: function (data) {
+                    // Clear existing table data
+                    var table = $('#disasterTable').DataTable();
+                    table.clear();
+
+                    // Populate the table with new data
+                    $.each(data, function (index, disaster) {
+                        table.row.add([
+                            disaster.type, // Adjust according to your data structure
+                            disaster.date,
+                            '<a href="#" class="btn btn-info">View</a>' // Add more buttons or links as needed
+                        ]).draw();
+                    });
+                },
+                error: function (xhr) {
+                    alert('An error occurred while fetching disaster reports.');
+                }
+            });
+        });
+
+        // Export buttons functionality
+        $('#exportPdfBtn').on('click', function () {
+            // Implement export to PDF logic
+        });
+
+        $('#exportExcelBtn').on('click', function () {
+            // Implement export to Excel logic
+        });
+
+        $('#exportCsvBtn').on('click', function () {
+            // Implement export to CSV logic
+        });
+    });
+</script>
