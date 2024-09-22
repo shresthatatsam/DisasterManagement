@@ -1,7 +1,17 @@
 ﻿@model IEnumerable<Disaster_Management_system.Models.AdminModels.DisasterCategoryViewModel>
+
 @{
     ViewData["Title"] = "Disaster Management";
 }
+<!-- Include Bootstrap CSS -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Include Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 
 <div class="container mt-5">
     <h2>Disaster Management</h2>
@@ -11,10 +21,9 @@
 
     <!-- List of Disasters -->
     <div class="table-responsive">
-        <table class="table table-bordered">
+        <table class="table table-bordered" id="disasterTable">
             <thead>
                 <tr>
-                  
                     <th>Disaster Type</th>
                     <th>Severity</th>
                     <th>Actions</th>
@@ -26,7 +35,6 @@
                     <tr>
                         <td>@disaster.Name</td>
                         <td>@disaster.Severity</td>
-                     
                         <td>
                             <a href="@Url.Action("Edit", "Disasters", new { id = disaster.Id })" class="btn btn-warning btn-sm">Edit</a>
                             <a href="@Url.Action("Details", "Disasters", new { id = disaster.Id })" class="btn btn-info btn-sm">Details</a>
@@ -50,15 +58,12 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form asp-action="Create" asp-controller="Disasters" method="post">
+                <form id="addDisasterForm" method="post">
                     <div class="form-group">
                         <label for="disasterType">Disaster Type</label>
-                        <input type="text" class="form-control" id="disasterType" name="Type" required>
+                        <input type="text" class="form-control" id="disasterType" name="Name" required>
                     </div>
-                    <div class="form-group">
-                        <label for="location">Location</label>
-                        <input type="text" class="form-control" id="location" name="Location" required>
-                    </div>
+                  
                     <div class="form-group">
                         <label for="severity">Severity</label>
                         <select class="form-control" id="severity" name="Severity" required>
@@ -81,3 +86,41 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $('#addDisasterForm').on('submit', function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                url: '@Url.Action("Create", "Disastermanagement")',
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function (data) {
+                    // Clear the table body
+                    console.log(data);
+                    $('#disasterTable tbody').empty();
+
+                    // Append new disaster rows
+                    $.each(data, function (index, disaster) {
+                        $('#disasterTable tbody').append(
+                            `<tr>
+                                        <td>${disaster.name}</td>
+                                        <td>${disaster.severity}</td>
+                                      
+                                    </tr>`
+                        );
+                    });
+
+                    // Close the modal and reset the form
+                    $('#addDisasterModal').modal('hide');
+                    $('#addDisasterForm')[0].reset();
+                },
+                error: function (xhr) {
+                    alert('Error occurred while adding disaster.');
+                }
+            });
+        });
+    });
+</script>
+
