@@ -9,17 +9,14 @@
 <form id="Disaster-form" asp-action="Create" method="post">
   <div class="form-group">
         <label asp-for="Category" class="control-label"></label>
-        <select asp-for="Category"   class="form-control" id="disasterDropdown">
+        <select asp-for="Category" name="Category" class="form-control" id="disasterDropdown">
             <option value="">-- Select Category --</option>
             <!-- Categories will be populated here -->
         </select>
-        <span asp-validation-for="Category" class="text-danger"></span>
+
     </div>
 
-   @*  <div class="form-group">
 
-        <input asp-for="Category" id="Category" class="form-control" />
-    </div> *@
 
     <div class="form-group">
         <label asp-for="Severity" class="control-label"></label>
@@ -54,7 +51,7 @@
                 // Populate the dropdown
                 $.each(data, function (index, category) {
                     $('#disasterDropdown').append(
-                        `<option value="${category.id}">${category.name}</option>`
+                        `<option value="${category.name}">${category.name}</option>`
                     );
                 });
             },
@@ -68,11 +65,11 @@
         $('#Disaster_button').on('click', function () {
             // Gather form data by ID
             var data = {
-                Category: $('#Category').val(),
+                Category: $('#disasterDropdown').val(),
                 Severity: $('#Severity ').val(),
                 Date_Occured: $('#Date_Occured').val(),
             };
-
+            console.log(data);
             // URL to the LocationController Create action
             var url = '@Url.Action("Create", "Disaster")';
 

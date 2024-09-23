@@ -1,246 +1,143 @@
 ﻿
-<link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 
 
-@* @{
-    ViewData["Title"] = "Reports";
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+    <title>DataTables Example</title>
+    <style>
+        .btn {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Disaster Reports</h2>
+        <form id="reportForm" method="get" action="/Reports/GenerateDisasterReport">
+            <div class="form-group">
+                <label for="disasterType">Disaster Type:</label>
+                <select class="form-control" id="disasterType" name="disasterType">
+                    <option value="All">All</option>
+                    <option value="Earthquake">Earthquake</option>
+                    <option value="Flood">Flood</option>
+                    <option value="Fire">Fire</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="startDate">Start Date:</label>
+                <input type="date" class="form-control" id="startDate" name="startDate">
+            </div>
+            <div class="form-group">
+                <label for="endDate">End Date:</label>
+                <input type="date" class="form-control" id="endDate" name="endDate">
+            </div>
+            <button type="submit" class="btn btn-primary">Generate Report</button>
+        </form>
 
-
-<div class="container mt-5">
-    <h2>Reports</h2>
-
-    <!-- Tabs for different report categories -->
-    <ul class="nav nav-tabs" id="reportTabs" role="tablist">
-        <li class="nav-item">
-            <a class="nav-link active" id="disaster-tab" data-toggle="tab" href="#disaster" role="tab" aria-controls="disaster" aria-selected="true">Disaster Reports</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="victim-tab" data-toggle="tab" href="#victim" role="tab" aria-controls="victim" aria-selected="false">Victim Reports</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="resource-tab" data-toggle="tab" href="#resource" role="tab" aria-controls="resource" aria-selected="false">Resource Reports</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="user-tab" data-toggle="tab" href="#user" role="tab" aria-controls="user" aria-selected="false">User Reports</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="custom-tab" data-toggle="tab" href="#custom" role="tab" aria-controls="custom" aria-selected="false">Custom Reports</a>
-        </li>
-    </ul>
-
-    <!-- Tab content -->
-    <div class="tab-content mt-3">
-        <!-- Disaster Reports -->
-        <div class="tab-pane fade show active" id="disaster" role="tabpanel" aria-labelledby="disaster-tab">
-            <h4>Disaster Reports</h4>
-            <form method="post" action="@Url.Action("GenerateDisasterReport", "Reports")">
-                <div class="form-group">
-                    <label for="disasterType">Disaster Type:</label>
-                    <select class="form-control" id="disasterType" name="disasterType">
-                        <option value="All">All</option>
-                        <option value="Earthquake">Earthquake</option>
-                        <option value="Flood">Flood</option>
-                        <option value="Fire">Fire</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="startDate">Start Date:</label>
-                    <input type="date" class="form-control" id="startDate" name="startDate">
-                </div>
-                <div class="form-group">
-                    <label for="endDate">End Date:</label>
-                    <input type="date" class="form-control" id="endDate" name="endDate">
-                </div>
-                <button type="submit" class="btn btn-primary">Generate Report</button>
-            </form>
+        <div class="mt-3">
+            <button id="exportExcel" class="btn btn-success">Export to Excel</button>
+            <button id="exportPDF" class="btn btn-danger">Export to PDF</button>
         </div>
 
-        <!-- Victim Reports -->
-        <div class="tab-pane fade" id="victim" role="tabpanel" aria-labelledby="victim-tab">
-            <h4>Victim Reports</h4>
-            <form method="post" action="@Url.Action("GenerateVictimReport", "Reports")">
-                <div class="form-group">
-                    <label for="location">Location:</label>
-                    <input type="text" class="form-control" id="location" name="location" placeholder="Enter location">
-                </div>
-                <div class="form-group">
-                    <label for="conditionStatus">Condition Status:</label>
-                    <select class="form-control" id="conditionStatus" name="conditionStatus">
-                        <option value="All">All</option>
-                        <option value="Injured">Injured</option>
-                        <option value="Missing">Missing</option>
-                        <option value="Deceased">Deceased</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary">Generate Report</button>
-            </form>
-        </div>
-
-        <!-- Resource Reports -->
-        <div class="tab-pane fade" id="resource" role="tabpanel" aria-labelledby="resource-tab">
-            <h4>Resource Reports</h4>
-            <form method="post" action="@Url.Action("GenerateResourceReport", "Reports")">
-                <div class="form-group">
-                    <label for="resourceType">Resource Type:</label>
-                    <select class="form-control" id="resourceType" name="resourceType">
-                        <option value="All">All</option>
-                        <option value="Medical Supplies">Medical Supplies</option>
-                        <option value="Food">Food</option>
-                        <option value="Equipment">Equipment</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary">Generate Report</button>
-            </form>
-        </div>
-
-        <!-- User Reports -->
-        <div class="tab-pane fade" id="user" role="tabpanel" aria-labelledby="user-tab">
-            <h4>User Reports</h4>
-            <form method="post" action="@Url.Action("GenerateUserReport", "Reports")">
-                <div class="form-group">
-                    <label for="userRole">User Role:</label>
-                    <select class="form-control" id="userRole" name="userRole">
-                        <option value="All">All</option>
-                        <option value="Admin">Admin</option>
-                        <option value="Rescue Worker">Rescue Worker</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary">Generate Report</button>
-            </form>
-        </div>
-
-        <!-- Custom Reports -->
-        <div class="tab-pane fade" id="custom" role="tabpanel" aria-labelledby="custom-tab">
-            <h4>Custom Reports</h4>
-            <form method="post" action="@Url.Action("GenerateCustomReport", "Reports")">
-                <div class="form-group">
-                    <label for="customFilter">Custom Filter:</label>
-                    <input type="text" class="form-control" id="customFilter" name="customFilter" placeholder="Enter custom filter">
-                </div>
-                <button type="submit" class="btn btn-primary">Generate Report</button>
-            </form>
-        </div>
+        <!-- DataTable for displaying results -->
+        <table id="disasterTable" class="display mt-4" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Disaster Type</th>
+                    <th>Date</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody class="reportBody">
+                <!-- Data will be populated here -->
+            </tbody>
+        </table>
     </div>
 
-    <!-- Export Options -->
-    <div class="mt-4">
-        <button class="btn btn-success">Export to PDF</button>
-        <button class="btn btn-info">Export to Excel</button>
-        <button class="btn btn-warning">Export to CSV</button>
-    </div>
-</div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        // Avoid conflicts with other libraries
+        jQuery.noConflict();
+        jQuery(document).ready(function ($) {
+            // Initialize DataTable
+            var table = $('#disasterTable').DataTable();
 
- *@
+            // Handle form submission
+            $('#reportForm').on('submit', function (e) {
+                e.preventDefault(); // Prevent the default form submission
 
-@{
-    ViewData["Title"] = "Reports";
-}
+                var formData = $(this).serialize(); // Serialize form data
 
-<div class="container mt-5">
-    <h2>Reports</h2>
+                $.ajax({
+                    url: $(this).attr('action'),
+                    type: 'GET',
+                    data: formData,
+                    success: function (data) {
+                        console.log(data); // Log the response
+                        table.clear(); // Clear existing data
 
-    <ul class="nav nav-tabs" id="reportTabs" role="tablist">
-        <!-- Tab items remain unchanged -->
-    </ul>
+                        // Populate the table with new data
+                        if (Array.isArray(data) && data.length > 0) {
+                            $.each(data, function (index, disaster) {
+                                table.row.add([
+                                    disaster.type,
+                                    new Date(disaster.date).toLocaleDateString(), // Format the date
+                                    '<a href="#" class="btn btn-info">View</a>'
+                                ]).draw();
+                            });
+                        } else {
+                            table.row.add(['No records found', '', '']).draw();
+                        }
+                    },
+                    error: function (xhr) {
+                        alert('An error occurred while fetching disaster reports.');
+                    }
+                });
+            });
 
-    <div class="tab-content mt-3">
-        <div class="tab-pane fade show active" id="disaster" role="tabpanel" aria-labelledby="disaster-tab">
-            <h4>Disaster Reports</h4>
-            <form method="post" action="@Url.Action("GenerateDisasterReport", "Reports")">
-                <div class="form-group">
-                    <label for="disasterType">Disaster Type:</label>
-                    <select class="form-control" id="disasterType" name="disasterType">
-                        <option value="All">All</option>
-                        <option value="Earthquake">Earthquake</option>
-                        <option value="Flood">Flood</option>
-                        <option value="Fire">Fire</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="startDate">Start Date:</label>
-                    <input type="date" class="form-control" id="startDate" name="startDate">
-                </div>
-                <div class="form-group">
-                    <label for="endDate">End Date:</label>
-                    <input type="date" class="form-control" id="endDate" name="endDate">
-                </div>
-                <button type="submit" class="btn btn-primary">Generate Report</button>
-            </form>
+            // Export to Excel
+            $('#exportExcel').on('click', function () {
+                var data = table.rows().data().toArray();
+                var ws = XLSX.utils.json_to_sheet(data.map(row => ({
+                    'Disaster Type': row[0],
+                    'Date': row[1],
+                    'Details': row[2]
+                })));
+                var wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, 'Reports');
+                XLSX.writeFile(wb, 'disaster_reports.xlsx');
+            });
 
-            <!-- DataTable for displaying results -->
-            <table id="disasterTable" class="display mt-4" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Disaster Type</th>
-                        <th>Date</th>
-                        <th>Details</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Data will be populated here by DataTables -->
-                </tbody>
-            </table>
-        </div>
+            // Export to PDF
+            $('#exportPDF').on('click', function () {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
 
-        <!-- Other tabs remain unchanged -->
-    </div>
+                doc.setFontSize(12);
+                doc.text('Disaster Reports', 14, 22);
+                const tableData = table.rows().data().toArray();
 
-    <!-- Export Options -->
-    <div class="mt-4">
-        <button class="btn btn-success" id="exportPdfBtn">Export to PDF</button>
-        <button class="btn btn-info" id="exportExcelBtn">Export to Excel</button>
-        <button class="btn btn-warning" id="exportCsvBtn">Export to CSV</button>
-    </div>
-</div>
+                const headers = [['Disaster Type', 'Date', 'Details']];
+                const data = tableData.map(row => [row[0], row[1], row[2]]);
 
-<script>
-    $(document).ready(function () {
-        $('#disasterTable').DataTable();
+                doc.autoTable({
+                    head: headers,
+                    body: data,
+                    startY: 30,
+                });
 
-        // Use AJAX to fetch disaster reports on form submission
-        $('form').on('submit', function (e) {
-            e.preventDefault(); // Prevent the default form submission
-
-            var formData = $(this).serialize(); // Serialize form data
-
-            $.ajax({
-                url: $(this).attr('action'),
-                type: 'POST',
-                data: formData,
-                success: function (data) {
-                    // Clear existing table data
-                    var table = $('#disasterTable').DataTable();
-                    table.clear();
-
-                    // Populate the table with new data
-                    $.each(data, function (index, disaster) {
-                        table.row.add([
-                            disaster.type, // Adjust according to your data structure
-                            disaster.date,
-                            '<a href="#" class="btn btn-info">View</a>' // Add more buttons or links as needed
-                        ]).draw();
-                    });
-                },
-                error: function (xhr) {
-                    alert('An error occurred while fetching disaster reports.');
-                }
+                doc.save('disaster_reports.pdf');
             });
         });
+    </script>
+</body>
+</html>
 
-        // Export buttons functionality
-        $('#exportPdfBtn').on('click', function () {
-            // Implement export to PDF logic
-        });
 
-        $('#exportExcelBtn').on('click', function () {
-            // Implement export to Excel logic
-        });
-
-        $('#exportCsvBtn').on('click', function () {
-            // Implement export to CSV logic
-        });
-    });
-</script>
