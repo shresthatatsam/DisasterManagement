@@ -9,6 +9,7 @@ namespace Disaster_Management_system.Models.UserModels
     {
         public Guid Id { get; set; }
         public string Category { get; set; }
+        
         public string Severity { get; set; }
         public string Date_Occured { get; set; }
 

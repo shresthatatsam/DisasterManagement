@@ -7,5 +7,6 @@ namespace Disaster_Management_system.Data.Interface
         public DisasterCategoryViewModel Model{ get; set; }
         IEnumerable<DisasterCategoryViewModel> getAllDisasters();
         IEnumerable<DisasterCategoryViewModel> getDisastersByName(Guid id);
+        DisasterCategoryViewModel Create(DisasterCategoryViewModel model);
     }
 }
