@@ -31,6 +31,7 @@ namespace DMS.Controllers.Admin
             return Json(reports);
         }
 
+
         [HttpPost]
         public IActionResult GenerateVictimReport(string location, string conditionStatus)
         {

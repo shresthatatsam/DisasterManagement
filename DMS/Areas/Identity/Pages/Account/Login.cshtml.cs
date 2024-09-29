@@ -22,11 +22,13 @@ namespace DMS.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
-
-        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger)
+        //private readonly UserManager<IdentityUser> _userManager;
+        public readonly UserManager<ApplicationUser> _UserManager;
+        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger, UserManager<ApplicationUser> userManager)
         {
             _signInManager = signInManager;
             _logger = logger;
+            this._UserManager = userManager;
         }
 
         /// <summary>
@@ -107,48 +109,56 @@ namespace DMS.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl;
         }
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
-        {
-            if(Input.Email == "admin@gmail.com" && Input.Password =="Tk@123")
-            {
-            returnUrl = Url.Content("~/Dashboard");
 
+    
+    
+
+
+    public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+    {
+            
+        ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+          
+        if (ModelState.IsValid)
+        {
+            // This doesn't count login failures towards account lockout
+            // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+            var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+            if (result.Succeeded)
+            {
+                _logger.LogInformation("User logged in.");
+                    var user = await _UserManager.FindByEmailAsync(Input.Email);
+                    if (user != null)
+                    {
+                        // Get the roles of the current user
+                        var roleIds = await _UserManager.GetRolesAsync(user);
+
+                        // Check if the user has the "Admin" role
+                        if (roleIds.Contains("Admin"))
+                        {
+                            returnUrl = Url.Content("~/Dashboard");
+                        }
+                    }
+                    return LocalRedirect(returnUrl);
+            }
+            if (result.RequiresTwoFactor)
+            {
+                return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
+            }
+            if (result.IsLockedOut)
+            {
+                _logger.LogWarning("User account locked out.");
+                return RedirectToPage("./Lockout");
             }
             else
             {
-                returnUrl ??= Url.Content("~/");
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                return Page();
             }
-
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-
-            if (ModelState.IsValid)
-            {
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
-                if (result.Succeeded)
-                {
-                    _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
-                }
-                if (result.RequiresTwoFactor)
-                {
-                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
-                }
-                if (result.IsLockedOut)
-                {
-                    _logger.LogWarning("User account locked out.");
-                    return RedirectToPage("./Lockout");
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return Page();
-                }
-            }
-
-            // If we got this far, something failed, redisplay form
-            return Page();
         }
+
+        // If we got this far, something failed, redisplay form
+        return Page();
     }
+}
 }

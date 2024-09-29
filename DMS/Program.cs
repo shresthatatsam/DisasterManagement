@@ -17,6 +17,10 @@ builder.Services.AddSession(options =>
 });
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false).AddRoles<IdentityRole>().AddEntityFrameworkStores<DMSDbContext>();
 
+
+builder.Services.AddRazorPages();
+
+
 builder.Services.AddScoped<IDisasterCategory, DisasterCategory>();
 builder.Services.AddScoped<IVictim, Victim>();
 builder.Services.AddScoped<IDisaster, Disaster>();
@@ -25,7 +29,6 @@ builder.Services.AddScoped<ILocation, Location>();
 builder.Services.AddScoped<IReportService, ReportService>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
