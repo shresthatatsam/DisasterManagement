@@ -233,6 +233,7 @@
         method: 'GET',
         data: { id: victimId },
         success: function (response) {
+            console.log(response);
             if (response.victim) {
                 var victim = response.victim.result;
                 $('#victimName').val(victim.name);

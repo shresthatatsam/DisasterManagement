@@ -139,6 +139,7 @@
                     success: function (response) {
                         if (response.success) {
                             alert('Images uploaded successfully!');
+                            $('#addVictimModal').modal('hide');
                         } else {
                             alert('An error occurred. Please try again.');
                         }
