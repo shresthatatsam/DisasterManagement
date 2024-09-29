@@ -211,16 +211,11 @@ namespace DMS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("VictimId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("user_id")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("VictimId");
 
                     b.HasIndex("user_id");
 
@@ -440,19 +435,11 @@ namespace DMS.Migrations
 
             modelBuilder.Entity("Disaster_Management_system.Models.UserModels.PhotosViewModel", b =>
                 {
-                    b.HasOne("Disaster_Management_system.Models.UserModels.VictimViewModel", "Victim")
-                        .WithMany("Photos")
-                        .HasForeignKey("VictimId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("DMS.Areas.Identity.Data.ApplicationUser", "user")
                         .WithMany("Photos")
                         .HasForeignKey("user_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Victim");
 
                     b.Navigation("user");
                 });
@@ -535,8 +522,6 @@ namespace DMS.Migrations
                     b.Navigation("Disasters");
 
                     b.Navigation("Locations");
-
-                    b.Navigation("Photos");
                 });
 #pragma warning restore 612, 618
         }
