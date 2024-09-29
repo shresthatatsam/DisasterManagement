@@ -1,4 +1,6 @@
-﻿using DMS.Data.Interface;
+﻿using Disaster_Management_system.Models.UserModels;
+using DMS.Data.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace DMS.Data
 {
@@ -13,7 +15,7 @@ namespace DMS.Data
 
         public IEnumerable<DisasterReport> GetDisasterReports(string disasterType, DateTime? startDate, DateTime? endDate)
         {
-            var query = _context.Disasters.AsQueryable();
+            var query = _context.Disasters.Include(x=>x.Victim).AsQueryable();
 
             // Filter by disaster type
             if (!string.IsNullOrEmpty(disasterType) && disasterType.ToLower() == "all")
@@ -27,7 +29,16 @@ namespace DMS.Data
 
             return query.Select(r => new DisasterReport
             {
-                Type = r.Category, 
+                Type = r.Category,
+                VictimViewModel = new VictimViewModel
+                {
+                    Name = r.Victim.Name, // Assuming 'Name' is a property of Victim
+                    Age = r.Victim.Age,
+                    Gender = r.Victim.Gender,
+                    ContactNumber =r.Victim.ContactNumber,
+                    Locations = r.Victim.Locations,
+                    Disasters = r.Victim.Disasters,
+                },
                 Date =Convert.ToDateTime(r.Date_Occured),
              
             }).ToList();
@@ -64,6 +75,7 @@ namespace DMS.Data
         public string Type { get; set; }
         public DateTime Date { get; set; }
         public string Details { get; set; }
+        public VictimViewModel VictimViewModel { get; set; }
     }
 
     public class VictimReport
