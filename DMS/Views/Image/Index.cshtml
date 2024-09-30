@@ -128,18 +128,42 @@
                 formData.append('VictimId', $('#victimId').val() || '');
 
                 // URL to the server API
-                const url = '/Image/Create'; // Adjust the URL accordingly
+                // const url = '/Image/Create'; // Adjust the URL accordingly
+                      var url = '@Url.Action("Create", "Image")';
 
                 $.ajax({
                     url: url,
                     type: 'POST',
                     data: formData,
-                    processData: false, // Prevent jQuery from automatically processing the data
-                    contentType: false, // Prevent jQuery from automatically setting the content type
+                     processData: false, // Prevent jQuery from automatically processing the data
+                     contentType: false, // Prevent jQuery from automatically setting the content type
                     success: function (response) {
+                        console.log(response);
                         if (response.success) {
+
+                            $('#myTab a[href="#PrintForm"]').tab('show');
                             alert('Images uploaded successfully!');
-                            $('#addVictimModal').modal('hide');
+                              $.ajax({
+                url: '/PrintForm/Index', // Adjust the URL as necessary
+                type: 'GET',
+                success: function (printResponse) {
+                    var victim = printResponse.result;
+                $('#victimName').val(victim.name);
+                $('#victimAge').val(victim.age);
+                $('#gender').val(victim.gender);
+                $('#contactNumber').val(victim.contactNumber);
+                $('#victimLocation').val(victim.locations[0].tole);
+                $('#DisasterType').val(victim.disasters[0].category);
+                $('#victimStatus').val(victim.status);
+                $('#victimId').val(victim.id);
+                 console.log(printResponse);
+                    // Optionally: You could update the UI or do something with the response
+                },
+                error: function (printError) {
+                    alert('Failed to load print form. Please try again.');
+                }
+            });
+                            // $('#addVictimModal').modal('hide');
                         } else {
                             alert('An error occurred. Please try again.');
                         }

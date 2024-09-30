@@ -1,0 +1,110 @@
+﻿<form id="victimForm">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="victimName">Name</label>
+                <input type="text" class="form-control" id="victimName" required readonly>
+            </div>
+            <div class="form-group">
+                <label for="victimAge">Age</label>
+                <input type="number" class="form-control" id="victimAge" required readonly>
+            </div>
+            <div class="form-group">
+                <label for="gender">gender</label>
+                <input type="text" class="form-control" id="gender" required readonly>
+            </div>
+            <div class="form-group">
+                <label for="contactNumber">contactNumber</label>
+                <input type="text" class="form-control" id="contactNumber" required readonly>
+            </div>
+            <div class="form-group">
+                <label for="victimLocation">Location</label>
+                <input type="text" class="form-control" id="victimLocation" required readonly>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="victimDisasterCategory">Disaster Category</label>
+                <input type="text" class="form-control" id="victimDisasterCategory" required readonly>
+            </div>
+            <div class="form-group">
+                <label for="victimStatus">Status</label>
+                <input type="text" class="form-control" id="victimStatus" required readonly>
+            </div>
+            <div class="form-group">
+                <label for="disasterType">DisasterType</label>
+                <input type="text" class="form-control" id="DisasterType" required readonly>
+            </div>
+
+            <input type="hidden" id="victimId">
+        </div>
+    </div>
+    <button type="button" class="btn btn-primary" id="printVictimBtn">Print Victim Details</button>
+
+</form>
+
+
+<script>
+    $(document).on('click', '#printVictimBtn', function () {
+        // Get the HTML content of the form
+        var printContent = `
+            <div class="container">
+                <h5>Victim Details</h5>
+                <form>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label><strong>Name:</strong></label>
+                                <p>${$('#victimName').val()}</p>
+                            </div>
+                            <div class="form-group">
+                                <label><strong>Age:</strong></label>
+                                <p>${$('#victimAge').val()}</p>
+                            </div>
+                            <div class="form-group">
+                                <label><strong>Gender:</strong></label>
+                                <p>${$('#gender').val()}</p>
+                            </div>
+                            <div class="form-group">
+                                <label><strong>Contact Number:</strong></label>
+                                <p>${$('#contactNumber').val()}</p>
+                            </div>
+                            <div class="form-group">
+                                <label><strong>Location:</strong></label>
+                                <p>${$('#victimLocation').val()}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label><strong>Disaster Category:</strong></label>
+                                <p>${$('#victimDisasterCategory').val()}</p>
+                            </div>
+                            <div class="form-group">
+                                <label><strong>Status:</strong></label>
+                                <p>${$('#victimStatus').val()}</p>
+                            </div>
+                            <div class="form-group">
+                                <label><strong>Disaster Type:</strong></label>
+                                <p>${$('#DisasterType').val()}</p>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        `;
+
+        var printWindow = window.open('', '', 'height=600,width=800');
+        printWindow.document.write('<html><head><title>Print</title>');
+        printWindow.document.write('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">');
+        printWindow.document.write('</head><body>');
+        printWindow.document.write(printContent);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+
+        printWindow.onload = function () {
+            printWindow.print();
+            printWindow.close();
+        };
+    });
+
+</script>

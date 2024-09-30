@@ -71,6 +71,7 @@ namespace Disaster_Management_system.Controllers.UserController
             photosViewModel.user_id = _userManager.GetUserId(this.User);
 
            await _Photos.Create(model, photosViewModel);
+            //return RedirectToAction("Index", "PrintForm");
             return Json(new { success = true });
         }
 
